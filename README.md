@@ -44,6 +44,18 @@ Jeu de données public **HMEQ** (Home Equity) : 5 960 prêts, 12 variables expli
 
 ## Démarche
 
+```mermaid
+flowchart TD
+    A["Données HMEQ<br/>5 960 prêts · 20 % de défauts"]
+    B["Analyse exploratoire<br/>et profilage des données"]
+    C["Présélection des modèles<br/>LazyPredict · 4 prétraitements comparés"]
+    D["Modélisation<br/>Régression logistique (référence) · XGBoost · LightGBM"]
+    E["Évaluation<br/>même jeu de test · recall prioritaire"]
+    F["Grille de score<br/>taux de défaut observés par profil"]
+
+    A --> B --> C --> D --> E --> F
+```
+
 1. **Analyse exploratoire** : distributions univariées et bivariées, taux de défaut par modalité et par tranche, chevauchement des classes (pairplots). Un rapport de profilage complet est fourni (`hmeq_report.html`).
 2. **Présélection des modèles** avec LazyPredict (une trentaine de classifieurs), en comparant 4 prétraitements : par défaut, suppression des outliers (IQR), prétraitement optimisé (imputation itérative, standardisation, encodage one-hot), et ce dernier combiné à SMOTE. Le recall et le ROC-AUC servent de critères, avec le temps d'exécution. `MORTDUE` est retirée car fortement corrélée à `VALUE`.
 3. **Régression logistique** (modèle de référence) : vérification des hypothèses (linéarité du logit, VIF, V de Cramér), trois variantes de variables (brutes, discrétisées, combinées), régularisations Ridge, Lasso et Elastic Net, déséquilibre traité par class weights ou SMOTE.

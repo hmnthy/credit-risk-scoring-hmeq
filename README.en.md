@@ -44,6 +44,18 @@ The data is the public **HMEQ** (Home Equity) dataset: 5,960 loans, 12 explanato
 
 ## Approach
 
+```mermaid
+flowchart TD
+    A["HMEQ data<br/>5,960 loans · 20 % defaults"]
+    B["Exploratory analysis<br/>and data profiling"]
+    C["Model shortlisting<br/>LazyPredict · 4 preprocessing set-ups"]
+    D["Modelling<br/>Logistic regression (baseline) · XGBoost · LightGBM"]
+    E["Evaluation<br/>same test set · recall first"]
+    F["Score grid<br/>observed default rates by profile"]
+
+    A --> B --> C --> D --> E --> F
+```
+
 1. **Exploratory analysis.** We looked at univariate and bivariate distributions, default rates by category and by bin, and class overlap (pairplots). A full profiling report is included (`hmeq_report.html`).
 2. **Model shortlisting.** LazyPredict (around thirty classifiers) was run under 4 preprocessing set-ups: default, outlier removal (IQR), optimised preprocessing (iterative imputation, scaling, one-hot encoding), and that last set-up combined with SMOTE. Models were compared on recall and ROC-AUC, with run time as a third criterion. `MORTDUE` was dropped because it is highly correlated with `VALUE`.
 3. **Logistic regression (baseline).** We checked the model assumptions (logit linearity, VIF, Cramér's V) and tried three feature sets (raw, discretised, combined). We used Ridge, Lasso and Elastic Net regularisation, and handled imbalance with class weights or SMOTE.

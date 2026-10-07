@@ -44,6 +44,18 @@ Nhóm dùng bộ dữ liệu công khai **HMEQ** (Home Equity): 5 960 khoản va
 
 ## Cách tiếp cận
 
+```mermaid
+flowchart TD
+    A["Dữ liệu HMEQ<br/>5 960 khoản vay · 20 % vỡ nợ"]
+    B["Phân tích khám phá<br/>và profiling dữ liệu"]
+    C["Sàng lọc mô hình<br/>LazyPredict · 4 cách tiền xử lý"]
+    D["Mô hình hoá<br/>Hồi quy logistic (tham chiếu) · XGBoost · LightGBM"]
+    E["Đánh giá<br/>cùng tập test · ưu tiên recall"]
+    F["Bảng điểm<br/>tỷ lệ vỡ nợ quan sát theo hồ sơ"]
+
+    A --> B --> C --> D --> E --> F
+```
+
 1. **Phân tích khám phá:** nhóm xem phân phối đơn biến và hai biến, tỷ lệ vỡ nợ theo từng nhóm và từng khoảng giá trị, và mức chồng lấn giữa hai lớp (pairplot). Báo cáo profiling đầy đủ nằm trong `hmeq_report.html`.
 2. **Sàng lọc mô hình:** dùng LazyPredict để chạy khoảng 30 bộ phân loại với 4 cách tiền xử lý: mặc định, loại outlier (IQR), tiền xử lý tối ưu (impute lặp, chuẩn hoá, one-hot), và tiền xử lý tối ưu kết hợp SMOTE. Các mô hình được so sánh theo recall, ROC-AUC và thời gian chạy. Biến `MORTDUE` bị loại vì tương quan mạnh với `VALUE`.
 3. **Hồi quy logistic (mô hình tham chiếu):** nhóm kiểm tra các giả định (tuyến tính của logit, VIF, Cramér's V) và thử ba bộ biến: biến gốc, biến rời rạc hoá, biến kết hợp. Mô hình dùng regularization Ridge, Lasso và Elastic Net; mất cân bằng lớp được xử lý bằng class weights hoặc SMOTE.
